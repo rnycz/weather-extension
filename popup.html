@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body>
+    <div id="current-weather">
+      <ul id="fav"></ul>
+      <div id="form">
+        <input type="text" name="city-input" id="city-input" placeholder="Wpisz miasto...">
+        <button id="show-weather"><i class="fa fa-search"></i></button>
+        <button id="add-fav"><i class="fa fa-heart-o"></i></button>
+      </div>
+      <div id="content">
+        <div id="city"></div>
+        <div id="temp"></div>
+        <div id="desc"></div>
+        <div id="info">
+          <div id="wind-speed"></div>
+          <div id="pressure"></div>
+          <div id="clouds"></div>
+          <div id="humidity"></div>
+        </div>
+        <div id="sunrise"></div>
+        <div id="sunset"></div>
+      </div>
+    </div>
+    <div id="forecast-weather">
+      <div>
+        <button id="back-weather"><span>Wróć </span></button>
+        <h3>Prognoza pogody - <span id="forecast-city"></span></h3>
+      </div>
+      <div id="forecast"></div>
+    </div>
+    <div id="footer">
+      <button id="show-forecast"><span>Prognoza pogody </span></button>
+    </div>
+  <script src="script.js"></script>
+  </body>
+</html>

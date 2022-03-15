@@ -1,0 +1,12 @@
+{
+    "name": "Pogoda",
+    "description": "Aktualna pogoda w danym mieście oraz 5-dniowa prognoza pogody z 3-godzinnym przeskokiem.",
+    "version": "1.0",
+    "manifest_version": 3,
+    "permissions": ["storage"],
+    "action": {
+      "default_icon": "images/icon.png",
+      "default_popup": "popup.html",
+      "default_title": "Pokaż pogode"
+  }
+}
