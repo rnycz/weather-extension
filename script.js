@@ -1,11 +1,11 @@
-const pad = num => ("0" + num).slice(-2);
-const getTimeFromDate = timestamp => {
+const pad = (num) => ("0" + num).slice(-2);
+const getTimeFromTimestamp = (timestamp) => {
   const date = new Date(timestamp * 1000);
   let hours = date.getHours(),
   minutes = date.getMinutes();
   return pad(hours) + ":" + pad(minutes);
 }
-const getFullDate = timestamp => {
+const getFullDateFromTimestamp = (timestamp) => {
   const date = new Date(timestamp * 1000);
   let year = date.getFullYear(),
   month = date.getMonth()+1,
@@ -39,8 +39,8 @@ const showWeather = () => {
         document.getElementById("clouds").innerHTML = "Zachmurzenie: "+data.clouds.all+"%";
         document.getElementById("pressure").innerHTML = "Ciśnienie: "+data.main.pressure+" hPa";
         document.getElementById("humidity").innerHTML = "Wilgotność: "+data.main.humidity+"%";
-        document.getElementById("sunrise").innerHTML = "Wschód słońca: "+getTimeFromDate(data.sys.sunrise);
-        document.getElementById("sunset").innerHTML = "Zachód słońca: "+getTimeFromDate(data.sys.sunset);
+        document.getElementById("sunrise").innerHTML = "Wschód słońca: "+getTimeFromTimestamp(data.sys.sunrise);
+        document.getElementById("sunset").innerHTML = "Zachód słońca: "+getTimeFromTimestamp(data.sys.sunset);
         document.getElementById("content").style.display = "block";
         document.getElementById("footer").style.display = "block";
 
@@ -64,7 +64,7 @@ const showForecast = () => {
     document.getElementById("forecast-city").innerHTML = forecast.city.name+", "+forecast.city.country;
       forecast.list.forEach(data => {
         const container = document.createElement('div');
-        container.className = "container";
+        container.className = "forecast-container";
 
         const time = document.createElement('div');
         time.className = "forecast-time";
@@ -72,7 +72,7 @@ const showForecast = () => {
         let date = data.dt_txt;
         let dateOutput = date.slice(0,10);
         time.innerHTML = getWeekday(dateOutput) + " " + date.slice(11,16)+"<br />"+
-        "<span style='font-size: 12px'>"+ getFullDate(dateFormat) +"</span>";
+        "<span style='font-size: 12px'>"+ getFullDateFromTimestamp(dateFormat) +"</span>";
         container.appendChild(time);
 
         const icon = document.createElement('img');
@@ -89,13 +89,13 @@ const showForecast = () => {
         tempLike.innerHTML = Math.round(parseFloat(data.main.feels_like)-273.15)+"&deg;";
         container.appendChild(tempLike);
 
-        const moreInfo = document.createElement('div');
-        moreInfo.className = "more-info";
-        moreInfo.innerHTML = "<p>Wiatr: "+Math.round(parseFloat(data.wind.speed)*(60*60)/1000)+" km/h</p>"+
+        const forecastInfo = document.createElement('div');
+        forecastInfo.className = "forecast-info";
+        forecastInfo.innerHTML = "<p>Wiatr: "+Math.round(parseFloat(data.wind.speed)*(60*60)/1000)+" km/h</p>"+
         "<p>Ciśnienie: "+data.main.pressure+" hPa</p>"+
         "<p>Zachmurzenie: "+data.clouds.all+"%</p>"+
         "<p>Wilgotność: "+data.main.humidity+"%</p>";
-        container.appendChild(moreInfo);
+        container.appendChild(forecastInfo);
 
         document.getElementById("forecast").appendChild(container);
     })
@@ -105,10 +105,11 @@ const showForecast = () => {
   });
 }
 
-const showForecastContent = () =>{
-  const forecastWeather = document.getElementById("forecast-weather").style;
-  const currentWeather = document.getElementById("current-weather").style;
-  const footer = document.getElementById("footer").style;
+const forecastWeather = document.getElementById("forecast-weather").style;
+const currentWeather = document.getElementById("current-weather").style;
+const footer = document.getElementById("footer").style;
+
+const showForecastContent = () => {
   document.body.style.width = "560px";
   document.body.style.height = "600px";
   document.body.style.transition = "0.2s"
@@ -118,10 +119,7 @@ const showForecastContent = () =>{
 }
 document.getElementById("show-forecast").onclick = showForecastContent;
 
-const showWeatherContent = () =>{
-  const forecastWeather = document.getElementById("forecast-weather").style;
-  const currentWeather = document.getElementById("current-weather").style;
-  const footer = document.getElementById("footer").style;
+const showWeatherContent = () => {
   document.body.style.width = "280px";
   document.body.style.height = "auto";
   document.body.style.transition = "0.2s"
@@ -132,7 +130,7 @@ const showWeatherContent = () =>{
 document.getElementById("back-weather").onclick = showWeatherContent;
 
 let favList = [];
-document.getElementById("add-fav").onclick = function(){
+const addElementToList = () => {
   const input = document.getElementById("city-input").value;
   if(!input){
     return;
@@ -143,6 +141,7 @@ document.getElementById("add-fav").onclick = function(){
   localStorage.setItem("list", JSON.stringify(favList));
   renderList();
 }
+document.getElementById("add-fav").onclick = addElementToList;
 
 const renderList = () => {
   const fav = document.getElementById("fav");
@@ -175,6 +174,6 @@ const renderList = () => {
   }
 }
 
-window.onload = () =>{
+window.onload = () => {
   renderList();
 }
