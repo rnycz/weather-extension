@@ -12,6 +12,35 @@ const getFullDateFromTimestamp = (timestamp) => {
   day = date.getDate();
   return pad(day)+"."+pad(month)+"."+year;
 }
+const getFullDateFromTimestampFormat =(timestamp) =>{
+  const date = new Date(timestamp * 1000);
+  let year = date.getFullYear(),
+  month = date.getMonth()+1,
+  day = date.getDate();
+  return year+"-"+pad(month)+"-"+pad(day);
+}
+const returnTime = (timezone) => {
+  const date = new Date();
+  let hours = date.getHours()+timezone,
+  minutes = date.getMinutes();
+  let infoGMT = "";
+  if(timezone+1>0){
+    infoGMT = "GMT+"+(timezone+1);
+  }else if(timezone+1<0){
+    infoGMT = "GMT"+(timezone+1);
+  }else{
+    infoGMT = "GMT0";
+  }
+  let newHours = hours - 24;
+  if(hours>23){
+    document.getElementById("current-time").innerHTML = "Aktualny czas: "+pad(newHours) + ":" + pad(minutes)+ " " +infoGMT;
+    document.getElementById("forecast-current-time").innerHTML = "Aktualny czas: "+pad(newHours) + ":" + pad(minutes)+ " " +infoGMT;
+  }else{
+    document.getElementById("current-time").innerHTML = "Aktualny czas: "+pad(hours) + ":" + pad(minutes)+ " " +infoGMT;
+    document.getElementById("forecast-current-time").innerHTML = "Aktualny czas: "+pad(hours) + ":" + pad(minutes)+ " " +infoGMT;
+  }
+}
+
 const removeChild = (parent) => {
   while(parent.firstChild){
     parent.removeChild(parent.firstChild);
@@ -32,21 +61,22 @@ const showWeather = () => {
       .then((resp) => resp.json())
       .then(data => {
         document.getElementById("city").innerHTML = data.name+", "+data.sys.country;
-        document.getElementById("temp").innerHTML = "<img src='http://openweathermap.org/img/wn/"+data.weather[0].icon+
-        "@2x.png' id='icon'/>"+Math.round(parseFloat(data.main.temp)-273.15)+"&deg;C<span id='temp-feels'>"+Math.round(parseFloat(data.main.feels_like)-273.15)+"&deg;C</span>";
+        document.getElementById("temp").innerHTML = "<img src='http://openweathermap.org/img/wn/"+data.weather[0].icon+"@2x.png' id='icon'/>"+
+        Math.round(parseFloat(data.main.temp)-273.15)+"&deg;C<span id='temp-feels'>"+Math.round(parseFloat(data.main.feels_like)-273.15)+"&deg;C</span>";
         document.getElementById("desc").innerHTML = data.weather[0].main+" - "+data.weather[0].description;
         document.getElementById("wind-speed").innerHTML = "Wiatr: "+Math.round(parseFloat(data.wind.speed)*(60*60)/1000)+" km/h";
         document.getElementById("clouds").innerHTML = "Zachmurzenie: "+data.clouds.all+"%";
         document.getElementById("pressure").innerHTML = "Ciśnienie: "+data.main.pressure+" hPa";
         document.getElementById("humidity").innerHTML = "Wilgotność: "+data.main.humidity+"%";
-        document.getElementById("sunrise").innerHTML = "Wschód słońca: "+getTimeFromTimestamp(data.sys.sunrise);
-        document.getElementById("sunset").innerHTML = "Zachód słońca: "+getTimeFromTimestamp(data.sys.sunset);
+        document.getElementById("sunrise").innerHTML = "Wschód słońca: "+getTimeFromTimestamp((data.sys.sunrise+data.timezone)-3600);
+        document.getElementById("sunset").innerHTML = "Zachód słońca: "+getTimeFromTimestamp((data.sys.sunset+data.timezone)-3600);
         document.getElementById("content").style.display = "block";
         document.getElementById("footer").style.display = "block";
 
         const parent = document.getElementById("forecast");
         removeChild(parent);
         showForecast();
+        returnTime((data.timezone/3600)-1);
       })
       .catch(error => {
         console.log(error);
@@ -61,6 +91,7 @@ const showForecast = () => {
   fetch(url)
   .then((resp) => resp.json())
   .then(forecast => {
+    const timezone = forecast.city.timezone;
     document.getElementById("forecast-city").innerHTML = forecast.city.name+", "+forecast.city.country;
       forecast.list.forEach(data => {
         const container = document.createElement('div');
@@ -69,10 +100,8 @@ const showForecast = () => {
         const time = document.createElement('div');
         time.className = "forecast-time";
         let dateFormat = data.dt
-        let date = data.dt_txt;
-        let dateOutput = date.slice(0,10);
-        time.innerHTML = getWeekday(dateOutput) + " " + date.slice(11,16)+"<br />"+
-        "<span style='font-size: 12px'>"+ getFullDateFromTimestamp(dateFormat) +"</span>";
+        time.innerHTML = getWeekday(getFullDateFromTimestampFormat((dateFormat+timezone)-3600)) + " "+ getTimeFromTimestamp((dateFormat+timezone)-3600) + "<br />"+
+        "<span style='font-size: 12px'>"+ getFullDateFromTimestamp((dateFormat+timezone)-3600) +"</span>";
         container.appendChild(time);
 
         const icon = document.createElement('img');
