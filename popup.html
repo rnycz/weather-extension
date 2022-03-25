@@ -23,6 +23,11 @@
           <div id="pressure"></div>
           <div id="clouds"></div>
           <div id="humidity"></div>
+          <div id="air-pollution"><a href="https://en.wikipedia.org/wiki/Air_quality_index#CAQI" target="_blank">Indeks jakości powietrza</a></div>
+          <div id="air-pollution-content">
+            <div id="air-pollution-aqi"></div>
+            <div id="air-pollution-time"></div>
+          </div>
         </div>
         <div id="current-time"></div>
         <div id="sunrise"></div>
@@ -30,10 +35,8 @@
       </div>
     </div>
     <div id="forecast-weather">
-      <div>
-        <button id="back-weather"><span>Wróć </span></button>
-        <h3>Prognoza pogody - <span id="forecast-city"></span><br /><span id="forecast-current-time"></span></h3>
-      </div>
+      <button id="back-weather"><span><i class="fa fa-arrow-left"></i></span></button>
+      <h3>Prognoza pogody - <span id="forecast-city"></span><br /><span id="forecast-current-time"></span></h3>
       <div id="forecast"></div>
     </div>
     <div id="footer">

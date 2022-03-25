@@ -14,6 +14,12 @@ body{
     h3{
         margin: 0;
         text-align: center;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 5px;
+        background-color: rgb(224, 215, 215);
+        z-index: 10;
     }
 }
 #show-weather{
@@ -58,7 +64,7 @@ body{
         transition: 0.5s;
     }
 }
-#icon{
+.icon{
     width: 20%;
 }
 #info{
@@ -68,6 +74,33 @@ body{
     div{
         padding: 2px;
     }
+    a{
+        text-decoration: none;
+        color: black;
+        &:hover{
+            text-decoration: underline;
+        }
+    }
+}
+#air-pollution{
+    position: fixed;
+    right: 5px;
+    bottom: 120px;
+    width: 60px;
+    height: 45px;
+    text-align: center;
+    font-size: 11px;
+    &:hover + #air-pollution-content{
+        display: block;
+        position: absolute;
+        right: 65px;
+        bottom: 120px;
+        height: 45px;
+        text-align: center;
+    }
+}
+#air-pollution-content{
+    display: none;
 }
 #city{
     font-size: 18px;
@@ -124,6 +157,9 @@ body{
 #content, #forecast-weather {
     display: none;
 }
+#forecast {
+    margin-top: 40px;
+}
 .forecast-container{
     text-align: center;
     margin: 5px;
@@ -168,15 +204,16 @@ body{
     z-index: 99;
     border: none;
     outline: none;
-    background-color: #2196F3;
+    background-color: #08d401;
     color: white;
     cursor: pointer;
-    padding: 8px;
+    padding: 6px;
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 20px;
     &:hover{
-        background-color: #0b7dda;
+        background-color: #08b302;
         transition: 0.5s;
+        font-size: 25px;
     }
 }
 #show-forecast{

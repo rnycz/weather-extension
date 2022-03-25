@@ -61,7 +61,7 @@ const showWeather = () => {
       .then((resp) => resp.json())
       .then(data => {
         document.getElementById("city").innerHTML = data.name+", "+data.sys.country;
-        document.getElementById("temp").innerHTML = "<img src='http://openweathermap.org/img/wn/"+data.weather[0].icon+"@2x.png' id='icon'/>"+
+        document.getElementById("temp").innerHTML = "<img src='http://openweathermap.org/img/wn/"+data.weather[0].icon+"@2x.png' class='icon'/>"+
         Math.round(parseFloat(data.main.temp)-273.15)+"&deg;C<span id='temp-feels'>"+Math.round(parseFloat(data.main.feels_like)-273.15)+"&deg;C</span>";
         document.getElementById("desc").innerHTML = data.weather[0].main+" - "+data.weather[0].description;
         document.getElementById("wind-speed").innerHTML = "Wiatr: "+Math.round(parseFloat(data.wind.speed)*(60*60)/1000)+" km/h";
@@ -77,6 +77,11 @@ const showWeather = () => {
         removeChild(parent);
         showForecast();
         returnTime((data.timezone/3600)-1);
+
+        let lat = data.coord.lat;
+        let lon = data.coord.lon;
+        let timezone = data.timezone
+        showAirPollution(lat, lon, timezone);
       })
       .catch(error => {
         console.log(error);
@@ -105,6 +110,7 @@ const showForecast = () => {
         container.appendChild(time);
 
         const icon = document.createElement('img');
+        icon.className = "icon-forecast";
         icon.src = 'http://openweathermap.org/img/wn/' + data.weather[0].icon + '.png';
         container.appendChild(icon);
 
@@ -127,6 +133,7 @@ const showForecast = () => {
         container.appendChild(forecastInfo);
 
         document.getElementById("forecast").appendChild(container);
+        forecastBgColor();
     })
   })
   .catch(error => {
@@ -134,6 +141,55 @@ const showForecast = () => {
   });
 }
 
+const showAirPollution = (lat, lon, timezone) => {
+  console.log(lat, lon);
+  const url = "https://api.openweathermap.org/data/2.5/air_pollution?lat="+lat+"&lon="+lon+"&appid=YOURAPIKEY";
+  fetch(url)
+  .then((resp) => resp.json())
+  .then(air => {
+    air.list.forEach(data => {
+      let aqi = data.main.aqi;
+      const airPollution = document.getElementById("air-pollution").style;
+      const airPollutionContent = document.getElementById("air-pollution-content").style;
+      if(aqi==1){
+        airPollution.backgroundColor = "#79bc6a";
+        airPollutionContent.backgroundColor = "#79bc6a";
+      }
+      if(aqi==2){
+        airPollution.backgroundColor = "#bbcf4c";
+        airPollutionContent.backgroundColor = "#bbcf4c";
+      }
+      if(aqi==3){
+        airPollution.backgroundColor = "#eec20b";
+        airPollutionContent.backgroundColor = "#eec20b";
+      }
+      if(aqi==4){
+        airPollution.backgroundColor = "#f29305";
+        airPollutionContent.backgroundColor = "#f29305";
+      }
+      if(aqi==5){
+        airPollution.backgroundColor = "#e8416f";
+        airPollutionContent.backgroundColor = "#e8416f";
+      }
+      document.getElementById("air-pollution-time").innerHTML = getTimeFromTimestamp((data.dt+timezone)-3600);
+      document.getElementById("air-pollution-aqi").innerHTML = "AQI: "+aqi;
+    })
+  })
+  .catch(error => {
+    console.log(error);
+  });
+}
+
+const forecastBgColor = () =>{
+  const containerColor = document.getElementsByClassName("forecast-container");
+  const iconSrc = document.getElementsByClassName("icon-forecast");
+  for(let i=0; i<iconSrc.length; i++){
+    const sliceSrc = iconSrc[i].src.slice(35,36);
+    if(sliceSrc=="d"){
+      containerColor[i].style.backgroundColor = "#0099e6";
+    } 
+  }
+}
 const forecastWeather = document.getElementById("forecast-weather").style;
 const currentWeather = document.getElementById("current-weather").style;
 const footer = document.getElementById("footer").style;
