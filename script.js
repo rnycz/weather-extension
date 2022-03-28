@@ -24,10 +24,10 @@ const returnTime = (timezone) => {
   let hours = date.getHours()+timezone,
   minutes = date.getMinutes();
   let infoGMT = "";
-  if(timezone+1>0){
-    infoGMT = "GMT+"+(timezone+1);
-  }else if(timezone+1<0){
-    infoGMT = "GMT"+(timezone+1);
+  if(timezone+1*2>0){ //*2 timezone change to summer
+    infoGMT = "GMT+"+(timezone+1*2);
+  }else if(timezone+1*2<0){
+    infoGMT = "GMT"+(timezone+1*2);
   }else{
     infoGMT = "GMT0";
   }
@@ -68,15 +68,15 @@ const showWeather = () => {
         document.getElementById("clouds").innerHTML = "Zachmurzenie: "+data.clouds.all+"%";
         document.getElementById("pressure").innerHTML = "Ciśnienie: "+data.main.pressure+" hPa";
         document.getElementById("humidity").innerHTML = "Wilgotność: "+data.main.humidity+"%";
-        document.getElementById("sunrise").innerHTML = "Wschód słońca: "+getTimeFromTimestamp((data.sys.sunrise+data.timezone)-3600);
-        document.getElementById("sunset").innerHTML = "Zachód słońca: "+getTimeFromTimestamp((data.sys.sunset+data.timezone)-3600);
+        document.getElementById("sunrise").innerHTML = "Wschód słońca: "+getTimeFromTimestamp((data.sys.sunrise+data.timezone)-3600*2);
+        document.getElementById("sunset").innerHTML = "Zachód słońca: "+getTimeFromTimestamp((data.sys.sunset+data.timezone)-3600*2);
         document.getElementById("content").style.display = "block";
         document.getElementById("footer").style.display = "block";
 
         const parent = document.getElementById("forecast");
         removeChild(parent);
         showForecast();
-        returnTime((data.timezone/3600)-1);
+        returnTime((data.timezone/3600)-1*2);
 
         let lat = data.coord.lat;
         let lon = data.coord.lon;
@@ -85,6 +85,7 @@ const showWeather = () => {
       })
       .catch(error => {
         console.log(error);
+        alert("Nie ma takiego miasta");
       });
     }
 }
@@ -105,8 +106,8 @@ const showForecast = () => {
         const time = document.createElement('div');
         time.className = "forecast-time";
         let dateFormat = data.dt
-        time.innerHTML = getWeekday(getFullDateFromTimestampFormat((dateFormat+timezone)-3600)) + " "+ getTimeFromTimestamp((dateFormat+timezone)-3600) + "<br />"+
-        "<span style='font-size: 12px'>"+ getFullDateFromTimestamp((dateFormat+timezone)-3600) +"</span>";
+        time.innerHTML = getWeekday(getFullDateFromTimestampFormat((dateFormat+timezone)-3600*2)) + " "+ getTimeFromTimestamp((dateFormat+timezone)-3600*2) + "<br />"+
+        "<span style='font-size: 12px'>"+ getFullDateFromTimestamp((dateFormat+timezone)-3600*2) +"</span>";
         container.appendChild(time);
 
         const icon = document.createElement('img');
@@ -142,7 +143,6 @@ const showForecast = () => {
 }
 
 const showAirPollution = (lat, lon, timezone) => {
-  console.log(lat, lon);
   const url = "https://api.openweathermap.org/data/2.5/air_pollution?lat="+lat+"&lon="+lon+"&appid=YOURAPIKEY";
   fetch(url)
   .then((resp) => resp.json())
@@ -150,28 +150,34 @@ const showAirPollution = (lat, lon, timezone) => {
     air.list.forEach(data => {
       let aqi = data.main.aqi;
       const airPollution = document.getElementById("air-pollution").style;
-      const airPollutionContent = document.getElementById("air-pollution-content").style;
+      const airPollutionContent = document.getElementById("air-pollution-content-1").style;
+      const iconAP = document.getElementById("icon-ap");
       if(aqi==1){
         airPollution.backgroundColor = "#79bc6a";
         airPollutionContent.backgroundColor = "#79bc6a";
+        iconAP.src = "images/icons-ap/1.png";
       }
       if(aqi==2){
         airPollution.backgroundColor = "#bbcf4c";
         airPollutionContent.backgroundColor = "#bbcf4c";
+        iconAP.src  = "images/icons-ap/2.png";
       }
       if(aqi==3){
         airPollution.backgroundColor = "#eec20b";
         airPollutionContent.backgroundColor = "#eec20b";
+        iconAP.src  = "images/icons-ap/3.png";
       }
       if(aqi==4){
         airPollution.backgroundColor = "#f29305";
         airPollutionContent.backgroundColor = "#f29305";
+        iconAP.src  = "images/icons-ap/4.png";
       }
       if(aqi==5){
         airPollution.backgroundColor = "#e8416f";
         airPollutionContent.backgroundColor = "#e8416f";
+        iconAP.src  = "images/icons-ap/5.png";
       }
-      document.getElementById("air-pollution-time").innerHTML = getTimeFromTimestamp((data.dt+timezone)-3600);
+      document.getElementById("air-pollution-time").innerHTML = getTimeFromTimestamp((data.dt+timezone)-3600*2);
       document.getElementById("air-pollution-aqi").innerHTML = "AQI: "+aqi;
     })
   })
@@ -186,7 +192,7 @@ const forecastBgColor = () =>{
   for(let i=0; i<iconSrc.length; i++){
     const sliceSrc = iconSrc[i].src.slice(35,36);
     if(sliceSrc=="d"){
-      containerColor[i].style.backgroundColor = "#0099e6";
+      containerColor[i].style.backgroundColor = "#1ab2ff";
     } 
   }
 }
