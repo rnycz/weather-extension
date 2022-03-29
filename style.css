@@ -1,10 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora&display=swap");
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
 
 body {
-  font-family: Verdana;
+  font-family: 'Sora', sans-serif;
   width: 280px;
   background-color: #e0d7d7;
 }
@@ -14,7 +15,7 @@ body {
 }
 
 #forecast-weather {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 #forecast-weather h3 {
@@ -102,25 +103,51 @@ body {
 
 #air-pollution {
   position: fixed;
-  right: 5px;
+  right: -100px;
   bottom: 120px;
-  width: 60px;
-  height: 45px;
+  width: 120px;
+  height: 50px;
   text-align: center;
-  font-size: 11px;
+  font-size: 12px;
+  border-radius: 5px 0 0 5px;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
 }
 
-#air-pollution:hover + #air-pollution-content {
-  display: block;
+#air-pollution:hover {
+  right: 0;
+}
+
+#air-pollution img {
+  width: 40px;
   position: absolute;
-  right: 65px;
-  bottom: 120px;
-  height: 45px;
-  text-align: center;
+  top: 50%;
+  -webkit-transform: translate(0, -50%);
+          transform: translate(0, -50%);
 }
 
-#air-pollution-content {
-  display: none;
+#air-pollution .air-pollution-show {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translate(0, -50%);
+          transform: translate(0, -50%);
+  font-size: 20px;
+}
+
+#air-pollution .air-pollution-content {
+  position: absolute;
+  top: 50%;
+  left: 17%;
+  -webkit-transform: translate(0, -50%);
+          transform: translate(0, -50%);
+}
+
+#air-pollution .air-pollution-img {
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  -webkit-transform: translate(0, -50%);
+          transform: translate(0, -50%);
 }
 
 #city {
@@ -190,7 +217,7 @@ body {
 }
 
 #forecast {
-  margin-top: 40px;
+  margin-top: 45px;
 }
 
 .forecast-container {

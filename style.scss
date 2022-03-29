@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora&display=swap');
+
 *{
     box-sizing: border-box;
 }
 body{
-    font-family: Verdana;
+    font-family: 'Sora', sans-serif;
     width: 280px;
     background-color: rgb(224, 215, 215);
 }
@@ -10,7 +12,7 @@ body{
     font-size: 14px;
 }
 #forecast-weather{
-    font-size: 12px;
+    font-size: 13px;
     h3{
         margin: 0;
         text-align: center;
@@ -84,23 +86,41 @@ body{
 }
 #air-pollution{
     position: fixed;
-    right: 5px;
+    right: -100px;
     bottom: 120px;
-    width: 60px;
-    height: 45px;
+    width: 120px;
+    height: 50px;
     text-align: center;
-    font-size: 11px;
-    &:hover + #air-pollution-content{
-        display: block;
-        position: absolute;
-        right: 65px;
-        bottom: 120px;
-        height: 45px;
-        text-align: center;
+    font-size: 12px;
+    border-radius: 5px 0 0 5px;
+    transition: all 0.5s;
+    &:hover{
+        right: 0;
     }
-}
-#air-pollution-content{
-    display: none;
+    img{
+        width: 40px;
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+    }
+    .air-pollution-show{
+        position: absolute;               
+        top: 50%;
+        transform: translate(0, -50%);
+        font-size: 20px;
+    }
+    .air-pollution-content{
+        position: absolute;
+        top: 50%;
+        left: 17%;
+        transform: translate(0, -50%);
+    }
+    .air-pollution-img{
+        position: absolute;
+        top: 50%;
+        left: 60%;
+        transform: translate(0, -50%);
+    }
 }
 #city{
     font-size: 18px;
@@ -158,7 +178,7 @@ body{
     display: none;
 }
 #forecast {
-    margin-top: 40px;
+    margin-top: 45px;
 }
 .forecast-container{
     text-align: center;
