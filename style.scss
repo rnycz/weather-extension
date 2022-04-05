@@ -217,9 +217,9 @@ body{
     text-align: center;
     margin: 10px 0 0 0;
 }
-#back-weather{
+#chart-weather{
     position: fixed;
-    bottom: 6px;
+    top: 6px;
     right: 6px;
     z-index: 99;
     border: none;
@@ -230,10 +230,33 @@ body{
     padding: 6px;
     border-radius: 10px;
     font-size: 20px;
+    transition: all 0.5s;
     &:hover{
         background-color: #08b302;
-        transition: 0.5s;
-        font-size: 25px;
+        padding: 8px;
+        top: 4px;
+        right: 4px;
+    }
+}
+#back-weather, #back-forecast{
+    position: fixed;
+    top: 6px;
+    left: 6px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: #08d401;
+    color: white;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 10px;
+    font-size: 20px;
+    transition: all 0.5s;
+    &:hover{
+        background-color: #08b302;
+        padding: 8px;
+        top: 4px;
+        left: 4px;
     }
 }
 #show-forecast{

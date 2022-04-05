@@ -1,8 +1,9 @@
 # Weather Extension
 
 Chrome extension showing the current weather and 5 Day / 3 Hour Forecast in any city. Also display AQI on hover or click to learn more about AQI. <br />
+Check the forecast on the charts created with [Chart.js](https://www.chartjs.org/).<br />
 Made in JavaScript, layout made in HTML and SCSS.<br />
-Weather data from [OpenWeatherMap](https://openweathermap.org/)
+Weather data from [OpenWeatherMap](https://openweathermap.org/).
 
 ## Get the code
 
@@ -18,4 +19,6 @@ Type any city or choose from favorite list. At any time you can add typed city t
 Then search for a current weather.<br />
 ![](images/2.PNG)<br />
 There is a button at the bottom to check the forecast.<br />
-![](images/3.PNG)
+![](images/3.PNG)<br />
+On the last page you can check forecast on the charts.<br />
+![](images/4.PNG)

@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="package/dist/chart.js"></script>
   </head>
   <body>
     <div id="current-weather">
@@ -43,12 +44,15 @@
     </div>
     <div id="forecast-weather">
       <button id="back-weather"><span><i class="fa fa-arrow-left"></i></span></button>
+      <button id="back-forecast"><span><i class="fa fa-arrow-left"></i></span></button>
       <h3>Prognoza pogody - <span id="forecast-city"></span><br /><span id="forecast-current-time"></span></h3>
+      <button id="chart-weather"><span><i class="fa fa-arrow-right"></i></span></button>
       <div id="forecast"></div>
+      <canvas id="tempChart"></canvas>
     </div>
     <div id="footer">
       <button id="show-forecast"><span>Prognoza pogody </span></button>
     </div>
-  <script src="script.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>

@@ -192,15 +192,25 @@ const forecastBgColor = () =>{
 }
 const forecastWeather = document.getElementById("forecast-weather").style;
 const currentWeather = document.getElementById("current-weather").style;
+const chartWeather = document.getElementById("chart-weather").style;
+const forecast = document.getElementById("forecast").style;
 const footer = document.getElementById("footer").style;
+const backWeather = document.getElementById("back-weather").style;
+const backForecast = document.getElementById("back-forecast").style;
 
 const showForecastContent = () => {
+  const chart = document.getElementById("tempChart").style;
   document.body.style.width = "560px";
-  document.body.style.height = "600px";
+  document.body.style.height = "580px";
   document.body.style.transition = "0.2s"
   forecastWeather.display = "block";
+  forecast.display = "block";
+  backWeather.display = "block";
+  chartWeather.display = "block";
   currentWeather.display = "none"
   footer.display = "none";
+  backForecast.display = "none";
+  chart.display = "none";
 }
 document.getElementById("show-forecast").onclick = showForecastContent;
 
@@ -213,6 +223,21 @@ const showWeatherContent = () => {
   footer.display = "block";
 }
 document.getElementById("back-weather").onclick = showWeatherContent;
+
+const showChartContent = () => {
+  const chart = document.getElementById("tempChart").style;
+  forecastIntoArray();
+  document.body.style.height = "auto";
+  forecast.display = "none";
+  backWeather.display = "none";
+  backForecast.display = "block";
+  chartWeather.display = "none";
+  chart.display = "block";
+  createChart();
+}
+document.getElementById("chart-weather").onclick = showChartContent;
+
+document.getElementById("back-forecast").onclick = showForecastContent;
 
 let favList = [];
 const addElementToList = () => {
@@ -262,3 +287,118 @@ const renderList = () => {
 window.onload = () => {
   renderList();
 }
+
+//charts
+let tempArray = new Array();
+let dateArray = new Array();
+let tempFeelsArray = new Array();
+const forecastIntoArray = () =>{
+  tempArray.length = 0;
+  dateArray.length = 0;
+  tempFeelsArray.length = 0;
+  const tempChart = document.getElementsByClassName("forecast-temp");
+  const dateChart = document.getElementsByClassName("forecast-time");
+  const tempFeelsChart = document.getElementsByClassName("forecast-temp-like");
+  for(let i=0; i<tempChart.length; i++){
+    tempArray.push(parseInt(tempChart[i].innerHTML))
+  }
+  for(let i=0; i<dateChart.length; i++){
+    let position = dateChart[i].innerHTML.search(":00");
+    dateArray.push(dateChart[i].innerHTML.slice(0,position+3));
+  }
+  for(let i=0; i<tempFeelsChart.length; i++){
+    tempFeelsArray.push(parseInt(tempFeelsChart[i].innerHTML));
+  }
+}
+
+const createChart = () => {
+  const canvasRemove = document.getElementById("tempChart");
+  if(canvasRemove){
+    canvasRemove.remove();
+  }
+  const canvas = document.createElement("canvas");
+  canvas.id = "tempChart";
+  const parent = document.getElementById("forecast-weather");
+  parent.appendChild(canvas);
+  const canvasStyle = document.getElementById("tempChart");
+  canvasStyle.height = 200;
+  canvasStyle.style = "margin-top: 45px; display:inline;";
+
+  const ctx = document.getElementById('tempChart').getContext('2d');
+  const data = {
+  labels: dateArray,
+  datasets: [{
+    label: 'Temperatura °C',
+    data: tempArray,
+    fill: true,
+    backgroundColor: 'rgb(179, 0, 0, 0.3)',
+    borderColor: '#e60000',
+    borderWidth: 2,
+    pointBackgroundColor: '#4d0000',
+    pointBorderColor: '#4d0000',
+    pointBorderWidth: 1,
+    pointHoverBorderColor: '#000000',
+    pointHoverBorderWidth: 3,
+    pointHoverBackgroundColor: '#000000',
+    tension: 0.6,
+    },
+    {
+      label: 'Temp. odczuwalna °C',
+      data: tempFeelsArray,
+      fill: true,
+      backgroundColor: 'rgb(0, 0, 230, 0.3)',
+      borderColor: '#0000e6',
+      borderWidth: 2,
+      pointBackgroundColor: '#000066',
+      pointBorderColor: '#000066',
+      pointBorderWidth: 1,
+      pointHoverBorderColor: '#000000',
+      pointHoverBorderWidth: 3,
+      pointHoverBackgroundColor: '#000000',
+      tension: 0.6,
+    }],
+  };
+  const tempChart = new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: {
+      plugins: {
+        tooltip: {
+          backgroundColor: 'black',
+          displayColors: false,
+          bodyFontSize: 14,
+          intersect: true
+        },
+        legend: {
+          labels: {
+            color: 'black'
+          }
+        },
+      },
+      scales: {
+        x:{
+          ticks: {
+            maxTicksLimit: 16,
+            color: 'black',
+            minRotation: 0,
+            maxRotation: 90
+          },
+        },
+        y: {
+          suggestedMin: 0,
+          suggestedMax: 30,
+          ticks: {
+            color: 'black',
+            stepSize: 5
+          }
+        }
+      }
+    }
+  });
+}
+Chart.defaults.plugins.legend.onHover = function() { 
+  document.body.style.cursor = 'pointer'; 
+};
+Chart.defaults.plugins.legend.onLeave = function() { 
+  document.body.style.cursor = 'default'; 
+};
