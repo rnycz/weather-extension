@@ -33,11 +33,11 @@ const returnTime = (timezone) => {
   }
   let newHours = hours - 24;
   if(hours>23){
-    document.getElementById("current-time").innerHTML = "Aktualny czas: "+pad(newHours) + ":" + pad(minutes)+ " " +infoGMT;
-    document.getElementById("forecast-current-time").innerHTML = "Aktualny czas: "+pad(newHours) + ":" + pad(minutes)+ " " +infoGMT;
+    document.getElementById("current-time").innerHTML = "<i class='fa-solid fa-clock'></i> "+pad(newHours) + ":" + pad(minutes)+ " " +infoGMT;
+    document.getElementById("forecast-current-time").innerHTML = "<i class='fa-solid fa-clock'></i> "+pad(newHours) + ":" + pad(minutes)+ " " +infoGMT;
   }else{
-    document.getElementById("current-time").innerHTML = "Aktualny czas: "+pad(hours) + ":" + pad(minutes)+ " " +infoGMT;
-    document.getElementById("forecast-current-time").innerHTML = "Aktualny czas: "+pad(hours) + ":" + pad(minutes)+ " " +infoGMT;
+    document.getElementById("current-time").innerHTML = "<i class='fa-solid fa-clock'></i> "+pad(hours) + ":" + pad(minutes)+ " " +infoGMT;
+    document.getElementById("forecast-current-time").innerHTML = "<i class='fa-solid fa-clock'></i> "+pad(hours) + ":" + pad(minutes)+ " " +infoGMT;
   }
 }
 
@@ -63,13 +63,16 @@ const showWeather = () => {
         document.getElementById("city").innerHTML = data.name+", "+data.sys.country;
         document.getElementById("temp").innerHTML = "<img src='http://openweathermap.org/img/wn/"+data.weather[0].icon+"@2x.png' class='icon'/>"+
         Math.round(parseFloat(data.main.temp)-273.15)+"&deg;C<span id='temp-feels'>"+Math.round(parseFloat(data.main.feels_like)-273.15)+"&deg;C</span>";
-        document.getElementById("desc").innerHTML = data.weather[0].main+" - "+data.weather[0].description;
+        let rain = data.hasOwnProperty('rain') ? '<i class="fa-solid fa-cloud-rain"></i> '+data.rain['1h']+' mm/h' : '<i class="fa-solid fa-cloud-rain"></i> 0 mm/h';
+        let snow = data.hasOwnProperty('snow') ? '<i class="fa-regular fa-snowflake"></i> '+data.snow['1h']+' mm/h' : '<i class="fa-regular fa-snowflake"></i> 0 mm/h';
+        document.getElementById("rain").innerHTML = rain;
+        document.getElementById("snow").innerHTML = snow;
         document.getElementById("wind-speed").innerHTML = "Wiatr: "+Math.round(parseFloat(data.wind.speed)*(60*60)/1000)+" km/h";
         document.getElementById("clouds").innerHTML = "Zachmurzenie: "+data.clouds.all+"%";
         document.getElementById("pressure").innerHTML = "Ciśnienie: "+data.main.pressure+" hPa";
         document.getElementById("humidity").innerHTML = "Wilgotność: "+data.main.humidity+"%";
-        document.getElementById("sunrise").innerHTML = "Wschód słońca: "+getTimeFromTimestamp((data.sys.sunrise+data.timezone)-3600*2);
-        document.getElementById("sunset").innerHTML = "Zachód słońca: "+getTimeFromTimestamp((data.sys.sunset+data.timezone)-3600*2);
+        document.getElementById("sunrise").innerHTML = "<img src='images/icons-ap/sunrise.png' /><br />" + getTimeFromTimestamp((data.sys.sunrise+data.timezone)-3600*2);
+        document.getElementById("sunset").innerHTML = "<img src='images/icons-ap/sunset.png' /><br />" + getTimeFromTimestamp((data.sys.sunset+data.timezone)-3600*2);
         document.getElementById("content").style.display = "block";
         document.getElementById("footer").style.display = "block";
 
@@ -124,6 +127,15 @@ const showForecast = () => {
         tempLike.className = "forecast-temp-like";
         tempLike.innerHTML = Math.round(parseFloat(data.main.feels_like)-273.15)+"&deg;";
         container.appendChild(tempLike);
+
+        let rain = data.hasOwnProperty('rain') ? '<i class="fa-solid fa-cloud-rain"></i> '+data.rain['3h']+' mm/3h' : '<i class="fa-solid fa-cloud-rain"></i> 0 mm/3h';
+        let snow = data.hasOwnProperty('snow') ? '<i class="fa-regular fa-snowflake"></i> '+data.snow['3h']+' mm/3h' : '<i class="fa-regular fa-snowflake"></i> 0 mm/3h';
+        const forecastPop = document.createElement('div');
+        forecastPop.className = "forecast-pop-info";
+        forecastPop.innerHTML = "<div>Szansa opadów: "+Math.round((data.pop)*100)+" %</div>"+
+        "<div class='pop'>"+ rain +"</div>"+
+        "<div class='pop'>"+ snow +"</div>";
+        container.appendChild(forecastPop);
 
         const forecastInfo = document.createElement('div');
         forecastInfo.className = "forecast-info";
@@ -264,7 +276,7 @@ const renderList = () => {
 
     const deleteBTN = document.createElement("button");
     deleteBTN.className = "delete-list";
-    deleteBTN.innerHTML = '<i class="fa fa-times"></i>'
+    deleteBTN.innerHTML = '<i class="fa-solid fa-xmark"></i>'
     deleteBTN.addEventListener("click", function () {
       favList.splice(i, 1);
       localStorage.setItem("list", JSON.stringify(favList));
@@ -292,6 +304,7 @@ window.onload = () => {
 let tempArray = new Array();
 let dateArray = new Array();
 let tempFeelsArray = new Array();
+let maxTemp = 0;
 const forecastIntoArray = () =>{
   tempArray.length = 0;
   dateArray.length = 0;
@@ -300,7 +313,7 @@ const forecastIntoArray = () =>{
   const dateChart = document.getElementsByClassName("forecast-time");
   const tempFeelsChart = document.getElementsByClassName("forecast-temp-like");
   for(let i=0; i<tempChart.length; i++){
-    tempArray.push(parseInt(tempChart[i].innerHTML))
+    tempArray.push(parseInt(tempChart[i].innerHTML))    
   }
   for(let i=0; i<dateChart.length; i++){
     let position = dateChart[i].innerHTML.search(":00");
@@ -309,6 +322,7 @@ const forecastIntoArray = () =>{
   for(let i=0; i<tempFeelsChart.length; i++){
     tempFeelsArray.push(parseInt(tempFeelsChart[i].innerHTML));
   }
+  maxTemp = Math.max(...tempArray);
 }
 
 const createChart = () => {
@@ -386,7 +400,7 @@ const createChart = () => {
         },
         y: {
           suggestedMin: 0,
-          suggestedMax: 30,
+          suggestedMax: maxTemp+10,
           ticks: {
             color: 'black',
             stepSize: 5

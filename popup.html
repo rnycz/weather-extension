@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <script src="package/dist/chart.js"></script>
   </head>
   <body>
@@ -13,12 +13,15 @@
       <div>
         <input type="text" name="city-input" id="city-input" placeholder="Wpisz miasto...">
         <button id="show-weather"><i class="fa fa-search"></i></button>
-        <button id="add-fav"><i class="fa fa-heart-o"></i></button>
+        <button id="add-fav"><i class="fa-solid fa-heart"></i></button>
       </div>
       <div id="content">
         <div id="city"></div>
         <div id="temp"></div>
-        <div id="desc"></div>
+        <div class="pop-info">
+          <div id="rain"></div>
+          <div id="snow"></div>
+        </div>
         <div id="info">
           <div id="wind-speed"></div>
           <div id="pressure"></div>
@@ -37,16 +40,18 @@
             </div>
           </div>
         </div>
-        <div id="current-time"></div>
-        <div id="sunrise"></div>
-        <div id="sunset"></div>
+        <div class="time-info">
+          <div id="current-time"></div>
+          <div id="sunrise" class="sun"></div>
+          <div id="sunset" class="sun"></div>
+        </div>
       </div>
     </div>
     <div id="forecast-weather">
-      <button id="back-weather"><span><i class="fa fa-arrow-left"></i></span></button>
-      <button id="back-forecast"><span><i class="fa fa-arrow-left"></i></span></button>
+      <button id="back-weather"><span><i class="fa-solid fa-arrow-left"></i></span></button>
+      <button id="back-forecast"><span><i class="fa-solid fa-arrow-left"></i></span></button>
       <h3>Prognoza pogody - <span id="forecast-city"></span><br /><span id="forecast-current-time"></span></h3>
-      <button id="chart-weather"><span><i class="fa fa-arrow-right"></i></span></button>
+      <button id="chart-weather"><span><i class="fa-solid fa-arrow-right"></i></span></button>
       <div id="forecast"></div>
       <canvas id="tempChart"></canvas>
     </div>

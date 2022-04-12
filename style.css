@@ -101,10 +101,31 @@ body {
   text-decoration: underline;
 }
 
+.time-info {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.time-info .sun {
+  float: left;
+  width: 50%;
+  margin-top: 5px;
+}
+
+.time-info i {
+  font-size: 18px;
+}
+
+.time-info:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
 #air-pollution {
   position: fixed;
   right: -100px;
-  bottom: 120px;
+  bottom: 150px;
   width: 120px;
   height: 50px;
   text-align: center;
@@ -165,10 +186,6 @@ body {
   margin-left: 10px;
 }
 
-#desc {
-  font-weight: 700;
-}
-
 #fav {
   margin: 0;
   padding: 0;
@@ -184,7 +201,7 @@ body {
   width: 65%;
 }
 
-.delete-list {
+.delete-list, .search-list {
   float: left;
   width: 15%;
   cursor: pointer;
@@ -193,23 +210,38 @@ body {
   margin: 0 0 0 6px;
 }
 
-.delete-list:hover {
+.delete-list i, .search-list i {
+  margin-top: 3px;
+}
+
+.delete-list:hover, .search-list:hover {
   background-color: red;
   border-radius: 5px;
-}
-
-.search-list {
-  float: left;
-  width: 15%;
-  cursor: pointer;
-  background-color: inherit;
-  border: none;
-  margin: 0 0 0 6px;
 }
 
 .search-list:hover {
   background-color: #2196F3;
   border-radius: 5px;
+}
+
+.pop-info {
+  text-align: center;
+  margin: 7px;
+}
+
+.pop-info div {
+  float: left;
+  width: 50%;
+}
+
+.pop-info div i {
+  font-size: 18px;
+}
+
+.pop-info:after {
+  content: "";
+  clear: both;
+  display: table;
 }
 
 #content, #forecast-weather {
@@ -242,6 +274,22 @@ body {
   padding: 2px;
 }
 
+.forecast-pop-info .pop {
+  float: left;
+  width: 50%;
+  margin: 5px 0 3px 0;
+}
+
+.forecast-pop-info .pop i {
+  font-size: 16px;
+}
+
+.forecast-pop-info:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
 .forecast-temp {
   font-size: 40px;
   opacity: 0.8;
@@ -264,9 +312,9 @@ body {
 }
 
 #chart-weather {
+  right: 6px;
   position: fixed;
   top: 6px;
-  right: 6px;
   z-index: 99;
   border: none;
   outline: none;
@@ -282,15 +330,12 @@ body {
 
 #chart-weather:hover {
   background-color: #08b302;
-  padding: 8px;
-  top: 4px;
-  right: 4px;
 }
 
 #back-weather, #back-forecast {
+  left: 6px;
   position: fixed;
   top: 6px;
-  left: 6px;
   z-index: 99;
   border: none;
   outline: none;
@@ -306,9 +351,6 @@ body {
 
 #back-weather:hover, #back-forecast:hover {
   background-color: #08b302;
-  padding: 8px;
-  top: 4px;
-  left: 4px;
 }
 
 #show-forecast {
