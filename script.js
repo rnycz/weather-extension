@@ -133,8 +133,8 @@ const showForecast = () => {
         const forecastPop = document.createElement('div');
         forecastPop.className = "forecast-pop-info";
         forecastPop.innerHTML = "<div>Szansa opadów: "+Math.round((data.pop)*100)+" %</div>"+
-        "<div class='pop'>"+ rain +"</div>"+
-        "<div class='pop'>"+ snow +"</div>";
+        "<div class='pop-rain'>"+ rain +"</div>"+
+        "<div class='pop-snow'>"+ snow +"</div>";
         container.appendChild(forecastPop);
 
         const forecastInfo = document.createElement('div');
@@ -304,14 +304,22 @@ window.onload = () => {
 let tempArray = new Array();
 let dateArray = new Array();
 let tempFeelsArray = new Array();
+let rainArray = new Array();
+let snowArray = new Array();
 let maxTemp = 0;
+let maxRain = 0;
+let maxSnow = 0;
+let maxPop = 0;
 const forecastIntoArray = () =>{
   tempArray.length = 0;
   dateArray.length = 0;
   tempFeelsArray.length = 0;
+  rainArray.length = 0;
   const tempChart = document.getElementsByClassName("forecast-temp");
   const dateChart = document.getElementsByClassName("forecast-time");
   const tempFeelsChart = document.getElementsByClassName("forecast-temp-like");
+  const rainChart = document.getElementsByClassName("pop-rain");
+  const snowChart = document.getElementsByClassName("pop-snow");
   for(let i=0; i<tempChart.length; i++){
     tempArray.push(parseInt(tempChart[i].innerHTML))    
   }
@@ -321,6 +329,23 @@ const forecastIntoArray = () =>{
   }
   for(let i=0; i<tempFeelsChart.length; i++){
     tempFeelsArray.push(parseInt(tempFeelsChart[i].innerHTML));
+  }
+  for(let i=0; i<rainChart.length; i++){
+    let position = rainChart[i].innerHTML.search("i>");
+    rainArray.push(parseFloat(rainChart[i].innerHTML.slice(position+2,position+7)));
+  }
+  for(let i=0; i<snowChart.length; i++){
+    let position = snowChart[i].innerHTML.search("i>");
+    snowArray.push(parseFloat(snowChart[i].innerHTML.slice(position+2,position+7)));
+  }
+  maxSnow = Math.max(...snowArray);
+  maxRain = Math.max(...rainArray);
+  if(maxRain == 0){
+    maxPop = maxSnow;
+  }else if(maxSnow == 0){
+    maxPop = maxRain;
+  }else{
+    maxPop = maxRain || maxSnow;
   }
   maxTemp = Math.max(...tempArray);
 }
@@ -342,6 +367,7 @@ const createChart = () => {
   const data = {
   labels: dateArray,
   datasets: [{
+    type: 'line',
     label: 'Temperatura °C',
     data: tempArray,
     fill: true,
@@ -357,6 +383,7 @@ const createChart = () => {
     tension: 0.6,
     },
     {
+      type: 'line',
       label: 'Temp. odczuwalna °C',
       data: tempFeelsArray,
       fill: true,
@@ -370,10 +397,31 @@ const createChart = () => {
       pointHoverBorderWidth: 3,
       pointHoverBackgroundColor: '#000000',
       tension: 0.6,
+    },
+    {
+      yAxisID: 'y1',
+      type: 'bar',
+      label: 'Deszcz mm/3h',
+      data: rainArray,
+      backgroundColor: 'rgb(0, 0, 77)',
+      hoverBackgroundColor: 'rgb(26, 26, 255)',
+      hoverBorderWidth: 1,
+      hoverBorderColor: 'rgb(128, 128, 255)',
+      barThickness: 5
+    },
+    {
+      yAxisID: 'y1',
+      type: 'bar',
+      label: 'Śnieg mm/3h',
+      data: snowArray,
+      backgroundColor: 'rgb(128, 128, 255)',
+      hoverBackgroundColor: 'rgb(26, 26, 255)',
+      hoverBorderWidth: 1,
+      hoverBorderColor: 'rgb(0, 0, 77)',
+      barThickness: 5
     }],
   };
   const tempChart = new Chart(ctx, {
-    type: 'line',
     data: data,
     options: {
       plugins: {
@@ -404,15 +452,36 @@ const createChart = () => {
           ticks: {
             color: 'black',
             stepSize: 5
+          },
+          title:{
+            display: true,
+            color: 'black',
+            padding: 2,
+            text: 'Temperatura °C',
           }
-        }
+        },
+        y1: {
+          position: 'right',
+          suggestedMin: 0,
+          suggestedMax: maxPop+1,
+          ticks: {
+            color: 'black',
+            stepSize: 1
+          },
+          title:{
+            display: true,
+            color: 'black',
+            padding: 2,
+            text: 'Opady mm/3h',
+          }
+        },
       }
     }
   });
 }
-Chart.defaults.plugins.legend.onHover = function() { 
+Chart.defaults.plugins.legend.onHover = () => { 
   document.body.style.cursor = 'pointer'; 
 };
-Chart.defaults.plugins.legend.onLeave = function() { 
+Chart.defaults.plugins.legend.onLeave = () => { 
   document.body.style.cursor = 'default'; 
 };

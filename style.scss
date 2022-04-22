@@ -228,7 +228,7 @@ body{
     }
 }
 .forecast-pop-info{
-    .pop{
+    div:not(:first-child) {
         float: left;
         width: 50%;
         margin: 5px 0 3px 0;
